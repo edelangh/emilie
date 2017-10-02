@@ -1,0 +1,25 @@
+{
+  "name": "emilie",
+  "version": "1.0.0",
+  "description": "- snowboy: use to detect hotwork, and start speechreconisation",
+  "main": "emilie.js",
+  "dependencies": {
+    "mic": "^2.1.2",
+    "snowboy": "^1.2.0",
+    "wav": "^1.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edelangh/emilie.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edelangh/emilie/issues"
+  },
+  "homepage": "https://github.com/edelangh/emilie#readme"
+}
