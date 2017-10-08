@@ -4,7 +4,7 @@ const wav = require('wav');
 const Detector = require('snowboy').Detector;
 const Models = require('snowboy').Models;
 
-function generate() {
+function generate(callback) {
         const models = new Models();
 
         models.add({
@@ -39,6 +39,7 @@ function generate() {
           // together with the <buffer> in the "sound" event if you want to get audio
           // data after the hotword.
           console.log('hotword', index, hotword);
+          callback();
         });
         return detector;
 }
