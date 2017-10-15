@@ -6,6 +6,7 @@ const say = require('./srcs/utils/tts.js').say;
 const fs = require('fs');
 
 function runSpeech(microRENAME, callback) {
+    say("What can i do ?");
     var outputFileStream = fs.WriteStream("./resources/output.raw");
     microRENAME.recordFor(outputFileStream, 5000, function () {
         outputFileStream.end();
