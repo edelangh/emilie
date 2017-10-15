@@ -4,37 +4,36 @@ const mic = require('mic');
 var micInstance = mic({ 'rate': '16000', 'channels': '1', 'debug': true, 'exitOnSilence': false });
 var micInputStream = micInstance.getAudioStream();
 
-function instance() {
-    return micInstance;
+micInstance.start();
+micInstance.pause();
+
+function recordFor(stream, time, callback) {
+    // Add new stream
+    micInstance.pause();
+    micInputStream.pipe(stream);
+
+    function mResume() {
+        console.log("throw timeout");
+        setTimeout(function() {
+                micInstance.pause();
+        }, time);
+    }
+    
+    function mPause() {
+        console.log("remove all");
+        micInputStream.unpipe(stream);
+        micInputStream.removeListener('resumeComplete', mResume);
+        micInputStream.removeListener('pauseComplete', mPause);
+        callback();
+    }
+
+    // resume with new stream
+    micInputStream.on('resumeComplete', mResume);
+    micInputStream.on('pauseComplete', mPause);
+    micInstance.resume();
 }
 
-function start() {
-    micInstance.start();
-    return micInputStream;
-}
-
-function stop() {
-    micInstance.stop();
-}
-
-function recordFor(pipe, time, callback) {
-    var micI = mic({ 'rate': '16000', 'channels': '1', 'debug': true, 'exitOnSilence': false });
-    var micIStream = micI.getAudioStream();
-
-        micIStream.on('startComplete', function() {
-            setTimeout(function() {
-                    micI.stop();
-            }, time);
-        });
-
-        micIStream.on('stopComplete', function() {
-            callback();
-        });
-
-        micI.start();
-}
+exports.instance = micInstance;
+exports.stream = micInputStream;
 
 exports.recordFor = recordFor;
-exports.instance = micInstance;
-exports.start = start;
-exports.stop = stop;
