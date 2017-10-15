@@ -5,28 +5,47 @@ const mic = require('./srcs/utils/micro.js');
 const say = require('./srcs/utils/tts.js').say;
 const fs = require('fs');
 
-function runSpeech(microRENAME, callback) {
-    say("What can i do ?");
-    var outputFileStream = fs.WriteStream("./resources/output.raw");
-    microRENAME.recordFor(outputFileStream, 5000, function () {
-        outputFileStream.end();
-        a.speech2text("./resources/output.raw", function (err, res, body) {
+function doSomething(str, callback) {
+    const list = [
+        {reg: /weather/gi, action: function () {say("Use an IA as meteorologist is a crime !", callback)}},
+        {reg: /what/gi, action: function () {say("Do you know Google ? So use it dude !", callback)}}
+    ];
 
-            if (err) 
-                return console.error("error: ", err)
-            else {
-                console.log(body);
-                const response = JSON.parse(body);
-                if (response && response.results) {
-                  const sentence = response.results[0].alternatives[0].transcript;
-                  say("you just say: " + sentence);
-                  console.log(sentence);
-                } else {
-                  console.error("result empty");
-                }
-            }
-        });
-        callback();
+    for (var i in list) {
+        event = list[i];
+        console.log(event);
+        if (str.match(event.reg))
+            return event.action();
+    }
+    callback();
+}
+
+function runSpeech(microRENAME, callback) {
+    say("What can i do ?", function () {
+            var outputFileStream = fs.WriteStream("./resources/output.raw");
+            microRENAME.recordFor(outputFileStream, 5000, function () {
+                outputFileStream.end();
+                a.speech2text("./resources/output.raw", function (err, res, body) {
+
+                    if (err) {
+                        console.error("error: ", err);
+                        return say("I'm sorry, but it's seem you have an error.", callback);
+                    }
+                    else {
+                        console.log(body);
+                        const response = JSON.parse(body);
+                        if (response && response.results) {
+                          const sentence = response.results[0].alternatives[0].transcript;
+                          say("You just say: " + sentence, function () {
+                            doSomething(sentence, callback);
+                          });
+                        } else {
+                          console.error("result empty");
+                          return say("I'm sorry, I did n't heard you correctly.", callback);
+                        }
+                    }
+                });
+            });
     });
 }
 

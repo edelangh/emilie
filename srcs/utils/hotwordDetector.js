@@ -8,9 +8,9 @@ function generate(callback) {
         const models = new Models();
 
         models.add({
-          file: 'resources/snowboy.umdl',
-          sensitivity: '0.9',
-          hotwords : 'snowboy'
+          file: 'resources/emilie.pmdl',
+          sensitivity: '0.5',
+          hotwords : 'emilie'
         });
 
         const detector = new Detector({
