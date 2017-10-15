@@ -4,9 +4,11 @@
   "description": "- snowboy: use to detect hotwork, and start speechreconisation",
   "main": "emilie.js",
   "dependencies": {
+    "lame": "^1.2.4",
     "mic": "^2.1.2",
+    "node-gtts": "^2.0.2",
     "snowboy": "^1.2.0",
-    "wav": "^1.0.1"
+    "speaker": "^0.4.0"
   },
   "devDependencies": {},
   "scripts": {

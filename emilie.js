@@ -1,8 +1,8 @@
 
 const hotword = require('./srcs/utils/hotwordDetector.js')
 const a = require('./srcs/utils/speech2text.js');
-const mic = require('./srcs/utils/micro.js')
-
+const mic = require('./srcs/utils/micro.js');
+const say = require('./srcs/utils/tts.js').say;
 const fs = require('fs');
 
 function runSpeech(microRENAME, callback) {
@@ -17,7 +17,8 @@ function runSpeech(microRENAME, callback) {
                 console.log(body);
                 const response = JSON.parse(body);
                 if (response && response.results) {
-                  const sentence = response.results[0].alternatives.transcript;
+                  const sentence = response.results[0].alternatives[0].transcript;
+                  say("you just say: " + sentence);
                   console.log(sentence);
                 } else {
                   console.error("result empty");
