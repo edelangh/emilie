@@ -1,5 +1,6 @@
 
 const say = require('../utils/tts.js').say;
+const confirm = require('../utils/confirm.js').confirm;
 const request = require('request');
 
 ///
@@ -53,7 +54,7 @@ function action_add(str, callback) {
     if (m) {item = m[1];}
 
     if (item) {
-        return say(`I will add ${item} to shopping list`, function () {
+        return confirm(`Do you want add ${item} to shopping list`, function () {
             const m = item.match(/(some|an|\d*(?: )?(?:kg|kilograms|kilo|g|l|litre|litres)?) (.*)/i);
             
             var name = item;
@@ -62,10 +63,12 @@ function action_add(str, callback) {
                 name = m[2];
                 volume = m[1];
             }
-            console.log(m);
-            console.log(`=========== ${name} == ${volume} ====`);
-            callback();
-//            dashboard_shopping_post(name, volume, callback);
+            say(`I will add ${volume} of ${name} in your shopping list.`, function () {
+              dashboard_shopping_post(name, volume, callback);
+            });
+        },
+        function() {
+            say(`cancelled`, callback);
         });
     }
     return false;

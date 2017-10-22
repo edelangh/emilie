@@ -3,6 +3,7 @@ const google = require('./utils/speech2text.js');
 const say = require('./utils/tts.js').say;
 const fs = require('fs');
 const modules = require('./modules').modules;
+const mic = require('./utils/micro.js');
 
 function say_help(callback) {
     var rep = "I can: ";
@@ -32,10 +33,10 @@ function doSomething(str, callback) {
     }
 }
 
-function runSpeech(micro, callback) {
+function runSpeech(callback) {
     say("What can i do ?", function () {
             var outputFileStream = fs.WriteStream("./resources/output.raw");
-            micro.recordFor(outputFileStream, 5000, function () {
+            mic.recordFor(outputFileStream, 5000, function () {
                 outputFileStream.end();
                 google.speech2text("./resources/output.raw", function (err, _, body) {
 

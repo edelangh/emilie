@@ -9,7 +9,7 @@ const detector = hotword.generate(function () {
     mic.stream.unpipe(detector);
 
     // Restart
-    mainRun(mic, runHotword);
+    mainRun(runHotword);
 });
 
 function runHotword() {
