@@ -8,24 +8,26 @@ function say_help(callback) {
     var rep = "I can: ";
     modules.forEach(function (module) {
         rep += module.help;
-        if (i != modules.length) {
-            rep += " and ";
-        }
+        rep += " and ";
     });
+    rep += 'that\'s all';
     say(rep, callback);
 }
 
 function doSomething(str, callback) {
-    if (modules.every(function (module) {
+    const res = modules.every(function (module) {
         if (str.match(/what can you do|help/i)) {
             console.log(`Module match: ${module.name}`);
             say_help(callback);
             return false;
         }
-        if (str.match(module.reg))
+        if (str.match(module.reg)) {
             module.action(str, callback);
             return false;
-    })) {
+        }
+        return true;
+    });
+    if (res || res === undefined) {
         callback();
     }
 }
@@ -35,7 +37,7 @@ function runSpeech(micro, callback) {
             var outputFileStream = fs.WriteStream("./resources/output.raw");
             micro.recordFor(outputFileStream, 5000, function () {
                 outputFileStream.end();
-                google.speech2text("./resources/output.raw", function (err, res, body) {
+                google.speech2text("./resources/output.raw", function (err, _, body) {
 
                     if (err) {
                         console.error("error: ", err);
