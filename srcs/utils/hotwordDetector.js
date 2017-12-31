@@ -1,6 +1,5 @@
 
 const fs = require('fs');
-const wav = require('wav');
 const Detector = require('snowboy').Detector;
 const Models = require('snowboy').Models;
 
